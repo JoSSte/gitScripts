@@ -15,7 +15,6 @@ files=`git diff --staged --name-only`
 #set changed flag to false
 CHANGED=false
 for filename in $files; do
-    printf "\narguments [$filename]\n\n"
     if [ "${filename: -24}" == ".postman_collection.json" ]; then
         sed -i -r 's/"(_postman_id|id)": "([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})"/"\1": "00000000-0000-0000-0000-000000000000"/gm' "$filename"
         git add $filename
