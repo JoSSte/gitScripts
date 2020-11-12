@@ -1,10 +1,24 @@
 #!/usr/bin/env bash
 
+# This pre-commit script goes through all the files in the commit, and finds *.postman_collection.json files.
+# Upon finding such a file, it will look for "id" and "_postman_id" values that are formed as UUIDs and replace them with all-zero UUIDs.
+# This is done to ensure that the differences on your code is what actually gives you value, and not a load of UUIDs that change on every commit.
+# The file is staged and a message is displayed
+
+#get the changed files
 files=`git diff --cached --name-status | awk '$1 != "D" { print $2 }'`
+#set changed flag to false
+CHANGED=false
 for filename in $files; do
     if [ "${filename: -24}" == ".postman_collection.json" ]; then
-        sed -i -r 's/"id": "([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})"/"id": "00000000-0000-0000-0000-000000000000"/gm' $filename
+        sed -i -r 's/"(_postman_id|id)": "([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})"/"\1": "00000000-0000-0000-0000-000000000000"/gm' "$filename"
         git add $filename
-        git commit --quiet --amend -C HEAD --no-verify
+        # mark changed flag true
+        CHANGED=true
     fi
 done
+# if files have been changed (potentially) display a message and abort the commit
+if $CHANGED; then
+    echo "PRE-COMMIT: Postman collection found. UUIDs have been sanitized. Please verify and recommit"
+    exit 1
+fi
