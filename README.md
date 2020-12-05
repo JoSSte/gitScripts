@@ -34,7 +34,10 @@ Script to ad tags to all remotes, or move a tag with a oneliner.
 
 ### Usage
   `tag.sh add <tagname> <commit>`         Adds <tag> at <commit>. If <commit> is omitted, current commit is used
+  
   `tag.sh move <tagname> <commit>`        Adds tag at <commit>. If <commit> is omitted, current commit is used. If it exists, it will delete the existing tag
+  
   `tag.sh remove <tagname>`               Removes tag from current git and all remotes
+  
   `tag.sh list`                           List tags
 
