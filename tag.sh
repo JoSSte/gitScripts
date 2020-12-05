@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# the newest version of this script can be found at https://github.com/JoSSte/gitScripts/blob/main/tag.sh
+
 ACTION=$1
 TAG_NAME=$2
 if [ -z "$3" ]
